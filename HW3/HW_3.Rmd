@@ -196,9 +196,9 @@ write.csv(college_recent_grads,'college_recent_grads.csv', row.names=FALSE)
 
 ####https://github.com/chiawang/SMU_MSDS_homework/blob/master/README.md
 
-
-####(c)In one (or more) of the nested directories, post your RMarkdown script, HTML file, and data from 'fivethirtyeight.'  Make sure that in your README or elsewhere that you credit fivethirtyeight in some way
+####(c)  In one (or more) of the nested directories, post your RMarkdown script, HTML file, and data from 'fivethirtyeight.'  Make sure that in your README or elsewhere that you credit fivethirtyeight in some way
+####https://github.com/chiawang/SMU_MSDS_homework/tree/master/HW3
 
 ####(d)  In your RMarkdown script, please provide the link to this GitHub so the grader can see it. 
  
- 
+####https://github.com/chiawang/SMU_MSDS_homework/blob/master/HW3/HW_3.Rmd 
