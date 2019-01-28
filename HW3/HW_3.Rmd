@@ -1,0 +1,204 @@
+---
+title: "HW3"
+author: "Queena Wang"
+date: "January 27, 2019"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Question 1**
+####(a) Create a new directory
+####mkdir dataScience
+
+####(b) Navigate to the appropriate directory
+####cd C:\\Users\\chiawa\\dataScience
+
+####(c) GitHub Cloning
+####git clone https://github.com/caesar0301/awesome-public-datasets
+
+## **Question 2**
+####(a) This dataset follows the passengers aboard the Titanic, including their fees paid, rooms rented, and survivorship status
+
+```{r, echo=TRUE}
+setwd("C:\\Users\\chiawa\\Documents\\R\\HW3")
+titanic.df <- read.csv("titanic.csv")
+head(titanic.df)
+```
+####(b) Output the respective count of females and males aboard the Titanic. Plot the frequency of females and males.  Be sure to give an accurate title and label the axes
+
+```{r females and males, echo=TRUE}
+table(titanic.df$Sex)
+```
+
+
+```{r females and males chart, echo=TRUE}
+library(ggplot2)
+sex <- ggplot(titanic.df) + geom_bar(aes(x = titanic.df$Sex, fill = titanic.df$Sex))
+
+sex + labs(fill = "Sex")+ labs(x = "Sex")+ labs(title = "Titanic Females vs Titanic Males ")
+
+```
+
+
+####(c) Please use one apply function (to review: swirl() modules 11, 12) to output the means of Age, Fare, and Survival.  Make sure the output is a real number for all three means. 
+
+```{r mean function, echo=TRUE}
+
+head(titanic.df)
+
+summary(titanic.df$Age)
+
+summary(titanic.df$Fare)
+
+summary(titanic.df$Survived)
+
+
+```
+
+## **Question 3**
+```{r data, echo=TRUE}
+setwd("C:\\Users\\chiawa\\Documents\\R\\HW3")
+data <- read.csv("sleep_data_01.csv")
+head(data)
+```
+
+####(a) Create objects for the median Age, the minimum and maximum Duration of sleep, and the mean and standard deviation of the Rosenberg Self Esteem scale (RSES).
+
+
+```{r objects, echo=TRUE}
+medianAge <-median(data$Duration,na.rm=TRUE)
+
+minimumSleep <- min(data$Duration, na.rm = TRUE)
+
+maximumSleep <- max(data$Duration, na.rm = TRUE)
+
+meanRSES <- mean(data$RSES, na.rm = TRUE)
+
+sdRSES <- sd(data$RSES, na.rm = TRUE)
+
+```
+
+####(b) Create a data.frame object called report: it should consist of the median age, the RSES mean and standard deviation respectively divided by five (since there are five questions and these scores are summed), and the range of Duration (the statistical definition of range; it should be a single number.) 
+
+```{r reportdata, echo=TRUE}
+
+sdDividedBy5 <- (sdRSES/5)
+
+rangeOfDuration <- (maximumSleep-minimumSleep)
+
+theReport <- data.frame(medianAge, meanRSES, rangeOfDuration, rangeOfDuration)
+
+summary(theReport)
+
+```
+
+####(c) Change the column names of this data.frame to MedianAge, SelfEsteem, SE_SD, and DurationRange
+
+```{r reportDataFrame, echo=TRUE}
+
+colnames(theReport) <- c("MedianAge", "SelfEsteem", "SE_SD", "DurationRange")
+
+summary(theReport)
+```
+
+####(d) Round the report to at most 2 digits: leave this as the closing line to the function. 
+
+```{r ReportDataOutput, echo=TRUE}
+round(theReport)
+
+```
+
+####(e) Finally, run the function on your sleep data to show the output. 
+
+```{r FinalData, echo=TRUE}
+theReport
+
+```
+
+## **Question 4**
+####(a) Install the fivethirtyeight package.
+
+```{r package , echo=TRUE}
+#install.packages("fivethirtyeight")
+library("fivethirtyeight")
+```
+
+####(b) In the listing of Data sets in package 'fivethirtyeight,' assign the 22nd data set to an object 'df.' c
+
+```{r fivethirtyeight, echo=TRUE}
+
+colgrads <- data.frame(college_recent_grads)
+
+```
+
+####(c) Use a more detailed list of the data sets to write out the URL in a comment to the related news story. 
+
+####https://blog.revolutionanalytics.com/2016/07/data-journalism-with-r-at-538.html
+
+####(d) Using R command(s), give the dimensions and column names of this data frame
+
+```{r fivethirtyeightCol, echo=TRUE}
+dim(colgrads)
+
+colnames(colgrads, prefix = "col")
+```
+
+
+## **Question 5**
+####(a) Write an R command that gives you the column names of the data frame.  Right after that, write one that counts the number of columns but not rows.  Hint: The number should match one of your numbers in Question 1d for dimensions.
+
+```{r colnames, echo=TRUE}
+colnames(colgrads, prefix = "col")
+
+```
+
+
+```{r Ecolumns, echo=TRUE}
+ncol(colgrads)
+
+```
+
+####(b) Generate a count of each unique major_category in the data frame.  I recommend using libraries to help.  To be clear, this should look like a matrix or data frame containing the major_category and the frequency it occurs in the dataset.  Assign it to major_count. 
+
+```{r majorCategory, echo = TRUE}
+
+major_count <- with(colgrads, tapply(major, major_category, FUN = function(x) length(unique(x))))
+major_count
+```
+
+
+####(c) To make things easier to read, put par(las=2) before your plot to make the text perpendicular to the axis.  Make a barplot of major_count.  Make sure to label the title with something informative (check the vignette if you need), label the x and y axis, and make it any color other than grey.  Assign the major_category labels to their respective bar.  Flip the barplot horizontally so that bars extend to the right, not upward.  All of these options can be done in a single pass of barplot(). Note: It's okay if it's wider than the preview pane. 
+
+```{r major, echo = TRUE}
+
+par(las=2)
+
+barplot(major_count, horiz=TRUE, col=c("green"), main="Each Major")
+```
+
+####(d) Write the fivethirtyeight data to a csv file.  Make sure that it does not have row labels
+
+```{r fivethirtyeightData, echo = TRUE}
+write.csv(college_recent_grads,'college_recent_grads.csv', row.names=FALSE)
+```
+
+
+## **Question 6**
+####(a)  Start a new repository on GitHub for your SMU MSDS homework.  On your local device, make sure there is a directory for Homework at the minimum; you are welcome to add whatever you would like to this repo in addition to your requirements here
+
+####https://github.com/chiawang/SMU_MSDS_homework
+
+####(b)  Create a README.md file which explains the purpose of the repository, the topics 
+
+####https://github.com/chiawang/SMU_MSDS_homework/blob/master/README.md
+
+
+####(c)In one (or more) of the nested directories, post your RMarkdown script, HTML file, and data from 'fivethirtyeight.'  Make sure that in your README or elsewhere that you credit fivethirtyeight in some way
+
+####(d)  In your RMarkdown script, please provide the link to this GitHub so the grader can see it. 
+ 
+ 
