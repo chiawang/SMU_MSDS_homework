@@ -1,0 +1,109 @@
+---
+title: "chiawang_Liveassignment05"
+author: "Queena Wang"
+date: "February 10, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 1 (a) Keep in mind this is not a CSV file.  You might have to open the file to see what you're dealing with.  Assign the resulting data frame to an object, df, that consists of three columns with humanreadable column names for each.
+```{r load data, echo=TRUE}
+#load data
+df_2016<-read.table("yob2016.txt", header=TRUE,sep=";")
+library(dplyr)
+
+#Assign human-readable column names for each
+df_2016<- rename(df_2016, first_name = Emma, gender = F, amount_of_children = X19414)
+
+```
+
+### 1 (b) Display the summary and structure of df 
+```{r display data, echo=TRUE}
+#display summary
+summary(df_2016)
+
+#display structure
+str(df_2016)
+```
+
+### 1 (c) Your client tells you that there is a problem with the raw file.  One name was entered twice and misspelled.  The client cannot remember which name it is; there are thousands he saw! But he did mention he accidentally put three y's at the end of the name.  Write an R command to figure out which name it is and display it. 
+```{r regex, echo=TRUE}
+#use regex to find the string "yyy"
+grep("yyy", df_2016$first_name, value = FALSE)
+
+df_2016[211,]
+```
+
+### 1 (d) Upon finding the misspelled name, please remove this particular observation, as the client says it's redundant. Save the remaining dataset as an object: y2016
+```{r remove data, echo=TRUE}
+y2016 <- df_2016[-211,]
+
+```
+
+### 2 (a) Like 1a, please import the .txt file into R.  Look at the file before you do.  You might have to change some options to import it properly.  Again, please give the dataframe human-readable column names.  Assign the dataframe to y2015.   
+```{r load 2015 data, echo=TRUE}
+df_2015<-read.table("yob2015.txt", header=TRUE,sep=",")
+names(df_2015)
+names(df_2015)<-c("first_name","gender","amount_of_children")
+```
+
+### 2 (b) Display the last ten rows in the dataframe.  Describe something you find interesting about these 10 rows.   
+```{r load last 10 row of 2015 data, echo=TRUE}
+tail(df_2015,10)
+```
+
+####I found that it's interesting all the name started with "Z"" are all male name. In addtion, every name is this list has 5 occurance.
+
+### 2 (c) Merge y2016 and y2015 by your Name column; assign it to final.  The client only cares about names that have data for both 2016 and 2015; there should be no NA values in either of your amount of children rows after merging
+```{r merge data, echo=TRUE}
+final<-merge(x=df_2015,y=df_2016, union("first_name","gender"), all=FALSE)
+
+##Assign proper naming to the data
+names(final)<-c("Name","Gender","Amount_of_children.2015","Amount_of_children.2016")
+str(final)
+
+##Check if there's any NAs
+anyNA(final)
+
+#Check for duplicates
+sum(duplicated(final))
+```
+
+### 3 (a) Create a new column called "Total" in final that adds the amount of children in 2015 and 2016 together.  In those two years combined, how many people were given popular names? 
+```{r total data, echo=TRUE}
+#Create a new column called "Total"
+final$Total <- final$Amount_of_children.2015+final$Amount_of_children.2016
+head(final,10)
+```
+
+###3 (b) Sort the data by Total.  What are the top 10 most popular names? 
+
+####The 10 most popular names are Olivia, Noah, Liam, Sophia, Ava, Mason, William, Jacob, Isabella and James
+```{r sort total data, echo=TRUE}
+#sort the data by total
+final$Total <- final$Amount_of_children.2015+final$Amount_of_children.2016
+final<-arrange(final, desc(Total))
+head(final,10)
+```
+
+### 3 (c) The client is expecting a girl!  Omit boys and give the top 10 most popular girl's names.
+```{r girl data, echo=TRUE}
+final$Total <- final$Amount_of_children.2015+final$Amount_of_children.2016
+final<-arrange(final,Gender,desc(Total))
+head(final,10)
+```
+
+### 3(d). Write these top 10 girl names and their Totals to a CSV file.  Leave out the other columns entirely. 
+```{r write data, echo=TRUE}
+##Write to the CSV file
+final$Total <- final$Amount_of_children.2015+final$Amount_of_children.2016
+final<-arrange(final,Gender,desc(Total))
+top10femaleNames<-head(final,10)[,c(1,5)]
+write.csv(top10femaleNames, "Top_10_Female_Names.csv", row.names=FALSE)
+```
+
+### 4
+####Github link: https://github.com/chiawang/SMU_MSDS_homework/tree/master/HW5
