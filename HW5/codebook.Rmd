@@ -1,0 +1,33 @@
+---
+
+title: "CodeBook"
+author: "Queena Wang"
+date: "February 10, 2019"
+output: html_document
+
+---
+###Description
+####Using the existing data to find out the most popular baby girls name for the client who is expecting a baby
+
+####Description of objects:
+####df_2016: This is a dataframe with the 2016 dataset 
+####df_2015: Thie is a dataframe with the 2015 dataset, 
+####final: dataframe with the merged 2015 and 2016 datasets,with a new column called "Total" that adds the amount of children in 2015 and 2016 together.
+
+###Data Description
+####Using two databases of names for babies in the US, for 2016 and 2017. 
+
+####1.yob2016.txt: A dataframe with 32868 obs. of 3 variables (seperated by colon (;))
+####2.yob2015.txt: A dataframe with 26549 obs. of 3 variables (seperate by comma (,))
+
+###Description of the variables
+####First_name: children's first name 
+####Gender: Male (M) or Female (F) 
+####Amount_of_children: The total occurance of the particular children name in the given year
+
+###Notes on data cleaning
+#####One repeated observation from the 2016 dataset
+
+###Notes on data merging
+####Data were merged based on the first_name variable. 
+
